@@ -107,33 +107,34 @@
                         <h6 class="mb-4">extra category category</h6>
                         <form method="post" action="/category/addextracategory">
                             <div class="col-12">
-                                <label for="inputState" class="form-label">State</label>
-                                <select name="categoryId" id="categoryId" class="form-select"
-                                    onchange="getcategoryId()">
-                                    <option value="">Select category</option>
-                                    <% Category.map((item,i)=>{%>
-                                        <option value="<%=item.id%>">
-                                            <%=item.category_name%>
+                                <label for="inputState" class="form-label">category</label>
+                                <select class="form-select" name="categoryId" id="catId"
+                                    onchange="return getsubcatData()">
+                                    <option>-- Select Category --</option>
+                                    <% Category.map((v,i)=>{ %>
+                                        <option value="<%= v.id %>">
+                                            <%= v.category_name %>
                                         </option>
-                                        <%}) %>
+                                        <% }) %>
                                 </select>
                             </div>
                             <br />
                             <div class="col-12">
-                                <label for="inputState" class="form-label">State</label>
-                                <select name="SubcategoryId" id="GetSubCategory" class="form-select">
-                                    <option value="">Select category</option>
-                                    <% SubCategory.map((item,i)=>{%>
-                                        <option value="<%=item.id%>">
-                                            <%=item.subcatgoryname%>
+                                <label for="inputState" class="form-label">sub category</label>
+                                <select class="form-select" name="subcategoryId" id="subcatId">
+                                    <option>-- Select Subcategory --</option>
+                                    <% SubCategory.map((v,i)=>{ %>
+                                        <option value="<%= v.id %>">
+                                            <%= v.subcategory_name %>
                                         </option>
-                                        <%}) %>
+                                        <% }) %>
                                 </select>
                             </div>
                             </br>
                             <div class="col-12">
                                 <label for="inputNanme4" class="form-label">ExtraCategory Name</label>
-                                <input type="text" name="extracategoryname" class="form-control" id="inputNanme4">
+                                <input type="text" placeholder="extracategory name" class="form-control"
+                                                name="extracategory_name">
                             </div>
                             <br />
                             <div class="text-center">
@@ -184,22 +185,20 @@
     <!-- Template Javascript -->
     <script src="../js/main.js"></script>
     <script>
-        function getcategoryId() {
-          console.log('object');
-            let categoryId = document.getElementById('GetSubCategory').value;
-    
-            $.ajex({
-              url:'/category/getsubcategory',
-              method:'post',
-              data:{
-                categoryId
-              },
-              success:function(res){
-                $('#GetSubCategory').html(res)
-              }
-            })
-        }
-      </script>
+        function getsubcatData() {
+        var catId = document.getElementById("catId").value;
+        $.ajax({
+            url: "/category/getsubcategory",
+            method: "POST",
+            data: {
+                "categoryId": catId
+            },
+            success: function (res) {
+                $("#subcatId").html(res)
+            }
+        })
+    }
+    </script>
     </body>
 
     </html>

@@ -21,7 +21,7 @@ routes.get('/deletesubcatgory', categoryctrl.DeleteSubCategory)
 routes.get('/updatesubcatgorypage', categoryctrl.UpdateSubCategoryPage)
 routes.post('/updatesubcatgory', categoryctrl.UpdateSubCategory)
 routes.get('/statussubcategory', categoryctrl.StatusSubCategory)
-routes.get('/getsubcategory',categoryctrl.GetSubCategory)
+routes.post('/getsubcategory',categoryctrl.GetSubCategory)
 
 // extra category
 routes.get('/extracategory', categoryctrl.extracategorypage)

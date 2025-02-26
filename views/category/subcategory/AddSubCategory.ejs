@@ -109,19 +109,20 @@
                         <div class="col-12">
                             <label for="inputState" class="form-label">category</label><br/>
                             
-                            <select name="categoryId" id="inputState" class="form-select">
-                                <option value="">Select category</option>
-                                <%viewcategory.map((v,i)=>{%>
-                                    <option value="<%=v.id%>">
-                                        <%=v.category_name%>
+                            <select class="form-select" name="categoryId" id="catId">
+                                <option>-- Select category --</option>
+                                <% viewcategory.map((v,i)=>{ %>
+                                    <option value="<%= v.id %>">
+                                        <%= v.category_name %>
                                     </option>
-                                    <%}) %>
+                                    <% }) %>
                             </select>
                         </div>
                         <br/>
                         <div class="col-12">
                             <label for="inputNanme4" class="form-label">SubCategory Name</label><br/>
-                            <input type="text" name="subcatgoryname" class="form-control" id="inputNanme4">
+                            <input type="text" placeholder="subcategory name" class="form-control"
+                            name="subcategory_name">
                         </div>
                     </br>
                         <div class="text-center">

@@ -1,18 +1,10 @@
-
 const authmodels=require("../models/AdminAuthmodels");
-
 const fs = require("fs");
-
 const path = require("path");
-
 const nodemailer = require("nodemailer");
-
 const bcrypt = require('bcrypt')
-
 const { setflash } = require("../config/flashmessage");
-
 const { validationResult } = require("express-validator");
-
 const otptimer = require("otp-timer");
 
 module.exports.header=async(req,res)=>{
@@ -126,7 +118,6 @@ module.exports.deletedata=async(req,res)=>{
         return res.redirect("back");
     }
 }
-
 
 module.exports.updatedata = async (req, res) => {
     var id = req.query.adminid;

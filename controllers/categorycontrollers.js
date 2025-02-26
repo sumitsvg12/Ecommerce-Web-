@@ -1,6 +1,7 @@
-const category = require("../models/categorymodels");
-const Subcategory = require("../models/Subcategory");
-const ExtraCategry = require("../models/Extracategorymodels");
+const category = require("../models/category");
+const Subcategory = require("../models/subcategory");
+const ExtraCategry = require("../models/extracategory");
+const subcategory = require("../models/subcategory");
 
 module.exports.addcategory = async (req, res) => {
     try {
@@ -16,8 +17,13 @@ module.exports.addcategory = async (req, res) => {
 module.exports.insercategory = async (req, res) => {
     try {
         let addcategory = await category.create(req.body);
-        console.log(addcategory)
-        return res.redirect("back")
+        if (addcategory) {
+            console.log("category Added Successfully");
+            return res.redirect("back");
+        } else {
+            console.log("category is Not Added");
+            return res.redirect("back");
+        }
     }
     catch (err) {
         console.log(err)
@@ -27,11 +33,41 @@ module.exports.viewcategory = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             res.locals.user = req.user
+
+            let search = '';
+            if (req.query.search) {
+                search = req.query.search
+            }
+            const perPage = 3;
+            var page;
+            if (req.query.pages) {
+                page = req.query.pages
+            }
+            else {
+                page = 0;
+            }
+
+            let viewcategory = await category.find({
+                $or: [
+                    { category_name: { $regex: new RegExp(search, "i") } }
+                ],
+            }).limit(perPage).skip(perPage * page);
+
+            let totalcatData = await category.find({
+                $or: [
+                    { category_name: { $regex: new RegExp(search, "i") } }
+                ],
+            })
+                .countDocuments();
             let activeviewcategory = await category.find({ status: "true" });
             let deactiveviewcategory = await category.find({ status: "false" });
             return res.render("category/viewcategory", {
                 activeviewcategory,
                 deactiveviewcategory,
+                viewcategory,
+                searchValue: search,
+                totalDocument: Math.ceil(totalcatData / perPage),
+                currentPage: parseInt(page),
 
             })
         }
@@ -154,13 +190,45 @@ module.exports.AddSubCategory = async (req, res) => {
 
 module.exports.ViewSubCategory = async (req, res) => {
     try {
+        var search = "";
+        var page;
+        if (req.query.search) {
+            search = req.query.search;
+        }
+        if (req.query.pages) {
+            page = req.query.pages;
+        } else {
+            page = 0;
+        }
+        const perPage = 4;
+        let subcatData = await Subcategory
+            .find({
+                $or: [
+                    { subcategory_name: { $regex: ".*" + search + ".*", $options: "i" } },
+                ],
+            })
+            .limit(perPage)
+            .skip(perPage * page)
+            .populate("categoryId")
+            .exec(); // Join Tables
+        let totalsubcatData = await Subcategory
+            .find({
+                $or: [
+                    { subcategory_name: { $regex: ".*" + search + ".*", $options: "i" } },
+                ],
+            })
+            .countDocuments();
         let activeSubCategory = await Subcategory.find({ status: "true" }).populate('categoryId').exec();
         let detiveSubCategory = await Subcategory.find({ status: "false" }).populate('categoryId').exec();
         if (req.isAuthenticated()) {
             res.locals.user = req.user
             return res.render('category/subcategory/viewsubcatgory', {
                 activeSubCategory,
-                detiveSubCategory
+                detiveSubCategory,
+                subcatData: subcatData,
+                searchValue: search,
+                totalDocument: Math.ceil(totalsubcatData / perPage),
+                currentPage: parseInt(page),
             })
         }
     }
@@ -254,20 +322,29 @@ module.exports.StatusSubCategory = async (req, res) => {
 
 module.exports.GetSubCategory = async (req, res) => {
     try {
-        let options = `<option>hiii</option>`
-        res.json(options)
-    }
-    catch (err) {
+        // console.log(req.body);
+        let subcatData = await Subcategory.find({
+          categoryId: req.body.categoryId,
+        });
+
+        console.log(subcatData);
+        let optionData = "<option value=''>-- Select Subcategory --</option>";
+        subcatData.map((v, i) => {
+          optionData += `<option value='${v.id}'>${v.subcategory_name}</option>`;
+        });
+        return res.json(optionData);
+      } catch (err) {
         console.log(err);
-        return res.redirect('back')
-    }
+      }
 }
 
 //Extra category
 module.exports.extracategorypage = async (req, res) => {
     try {
-        let Category = await category.find({ status: true })
-        let SubCategory = await Subcategory.find({ status: true })
+        let Category = await category.find({})
+        console.log(category);
+        let SubCategory = await Subcategory.find({})
+        console.log(subcategory);
         if (req.isAuthenticated()) {
             res.locals.user = req.user
             return res.render('category/Extracategory/AddExtraCategory', {
@@ -303,21 +380,54 @@ module.exports.addextracategory = async (req, res) => {
     }
 }
 
-
 module.exports.ViewExtraCategory = async (req, res) => {
     try {
+        var search = "";
+        var page;
+        if (req.query.search) {
+          search = req.query.search;
+        }
+        if (req.query.pages) {
+          page = req.query.pages;
+        } else {
+          page = 0;
+        }
+        const perPage = 4;
+        let extracategoryData = await ExtraCategry
+          .find({
+            $or: [
+              {
+                extracategory_name: { $regex: ".*" + search + ".*", $options: "i" },
+              },
+            ],
+          }).limit(perPage).skip(perPage * page).populate("subcategoryId").populate("categoryId").exec(); // To Join Multiple Tables
+           let totalextracatData = await ExtraCategry
+          .find({
+            $or: [
+              {
+                extracategory_name: { $regex: ".*" + search + ".*", $options: "i" },
+              },
+            ],
+          })
+          .countDocuments();
+
+
         let ExtraCategory = await ExtraCategry.find({ status: true })
+            .populate("subcategoryId")
             .populate("categoryId")
-            .populate("SubCategoryId")
             .exec();
         console.log(ExtraCategory);
 
-        let deactiveExtraCategory = await ExtraCategry.find({ status: false }).populate('categoryId').populate('SubCategoryId').exec()
+        let deactiveExtraCategory = await ExtraCategry.find({ status: false }).populate('categoryId').populate('subcategoryId').exec()
         if (req.isAuthenticated()) {
             res.locals.user = req.user
             return res.render('category/Extracategory/ViewExtraCategory', {
                 ExtraCategory,
-                deactiveExtraCategory
+                deactiveExtraCategory,
+                extracatData: extracategoryData,
+                searchValue: search,
+                totalDocument: Math.ceil(totalextracatData / perPage),
+                currentPage: parseInt(page),
             })
         }
     }
@@ -350,21 +460,38 @@ module.exports.DeleteextraCategory = async (req, res) => {
 
 module.exports.UpdateextraCategoryPage = async (req, res) => {
     try {
-        console.log(req.query);
+        if (req.isAuthenticated()) {
+            res.locals.user = req.user
+            
+        let extracatData = await ExtraCategry.findById(req.query.id);
+        return res.render("category/Extracategory/Update_extracategory", {
+          extracatData: extracatData,
+        });
     }
-    catch (err) {
-        console.log(err);
-        return res.redirect('back')
-    }
+      } catch (error) {
+        console.log(error);
+        return res.redirect("back");
+      }
 }
 module.exports.UpdateextraCategory = async (req, res) => {
     try {
-
-    }
-    catch (err) {
-        console.log(err);
-        return res.redirect('back')
-    }
+       
+          let updateData = await ExtraCategry.findByIdAndUpdate(
+            req.body.id,
+            req.body)
+        
+          if (updateData) {
+            console.log("extracategory Updated Successfully");
+            return res.redirect("back");
+          } else {
+            console.log("extracategory is not Updated");
+            return res.redirect("back");
+          }
+          
+      } catch (error) {
+        console.log(error);
+        return res.redirect("back");
+      }
 }
 
 module.exports.StatusextraCategory = async (req, res) => {

@@ -1,9 +1,4 @@
 const Userauth=require("../models/userauthmodels");
-const category = require("../models/categorymodels");
-const Subcategory = require("../models/Subcategory");
-const ExtraCategry = require("../models/Extracategorymodels");
-const Productmodel=require("../models/productmodels");
-
 const fs = require("fs");
 
 const path = require("path");
@@ -18,17 +13,8 @@ const { validationResult } = require("express-validator");
 
 module.exports.userecom=async(req,res)=>{
     try{
-        let Category = await category.find({ status: "true" })
-        let SubCategory = await Subcategory.find({ status: "true" })
-        let ExtraCategory = await ExtraCategry.find({ status: "true" })
-        let Product = await Productmodel.find({ status: "true" })
-
-      return res.render("ecommercepage/ecomerceheader",{
-        Category,
-        SubCategory,
-        ExtraCategory,
-        Product
-      })
+        
+      return res.render("ecommercepage/ecomerceheader")
     }
     catch(err){
         console.log(err);
@@ -36,17 +22,7 @@ module.exports.userecom=async(req,res)=>{
 }
 module.exports.home=async(req,res)=>{
     try{
-        let Category = await category.find({ status: "true" })
-        let SubCategory = await Subcategory.find({ status: "true" })
-        let ExtraCategory = await ExtraCategry.find({ status: "true" })
-        let Product = await Productmodel.find({ status: "true" })
-
-      return res.render("ecommercepage/home",{
-        Category,
-        SubCategory,
-        ExtraCategory,
-        Product
-      })
+      return res.render("ecommercepage/home")
     }
     catch(err){
         console.log(err);
