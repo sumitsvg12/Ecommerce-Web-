@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,8 +32,24 @@
 
     <!-- Template Stylesheet -->
     <link href="../css/style.css" rel="stylesheet">
-</head>
+    <style>
+        tr {
+            color: yellow;
+            background-color: rgb(211, 148, 104);
+        }
 
+        td {
+            border: 2px solid black;
+        }
+
+        th {
+            border: 2px solid black;
+        }
+        h6{
+            color: green;
+        }
+    </style>
+</head>
 <body>
     <div class="container-fluid position-relative d-flex p-0">
         <!-- Spinner Start -->
@@ -41,10 +59,7 @@
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
-        <!-- Spinner End -->
 
-
-        <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
                 <a href="index.html" class="navbar-brand mx-4 mb-3">
@@ -74,7 +89,7 @@
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="/login/adminform" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>admin</a>
                             <a href="/login/viewdata" class="nav-item nav-link"><i class="fa fa-table me-2"></i>viewdata</a>
-                            <a href="/login/updatedata" class="nav-item nav-link"><i
+                            <a href="/logi/nupdatedata" class="nav-item nav-link"><i
                                     class="fa fa-chart-bar me-2"></i>updatedata</a>
                         </div>
                     </div>
@@ -109,11 +124,7 @@
                 </div>
             </nav>
         </div>
-        <!-- Sidebar End -->
-
-        <!-- Content Start -->
         <div class="content">
-            <!-- Navbar Start -->
             <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
                 <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
@@ -207,12 +218,135 @@
                     </div>
                 </div>
             </nav>
-            <!-- Navbar End -->
+     
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">product </h2>
+                <p>Add, edit or delete a product</p>
+            </div>
+            <div>
+                <form>
+                    <div class="d-flex align-items-center">
+                        <input type="text" placeholder="Search Products" class="form-control bg-white" name="search"
+                            value="<%= searchValue %>">
+                        <button type="submit" class="btn btn-md m-2 rounded font-sm hover-up btn-primary"
+                            value="search">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-start">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" />
+                                            </div>
+                                        </th>
+                                        <th class="text-center">Image</th>
+                                        <th class="text-center">Product name</th>
+                                        <th class="text-center">Price</th>
+                                        <th class="text-center">color</th>
+                                        <th class="text-center">Size</th>
+                                        <th class="text-center">Subcategory</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if(productData !="" ){ %>
+                                        <% for(var pd of productData ){ %>
+                                            <tr class="">
+                                                <td class="text-start align-middle">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="" />
+                                                    </div>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <img src="<%= pd.product_image %>" class="img-sm img-thumbnail"
+                                                        alt="Product">
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <h6>
+                                                        <%= pd.product_name %>
+                                                    </h6>
+                                                </td>
+                                                <td class="text-center align-middle"><span>₹</span>
+                                                    <%= pd.product_price %>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <%= pd.product_color %>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <%= pd.product_size %>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <%= pd.subcategoryId.subcategory_name %>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <%if(pd.status){%>
+                                                        <a href="/product/isActive/<%=pd.id%>"
+                                                            class="badge rounded-pill alert-success">Active</a>
+                                                        <% }else{ %>
+                                                            <a href="/product/deActive/<%=pd.id%>"
+                                                                class="badge rounded-pill alert-danger">Inactive</a>
+                                                            <% }%>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <div class="dropdown">
+                                                        <a class="dropdown-item text-secondary border rounded bg-info"
+                                                            href="/product/updateproduct/<%= pd.id %>"><i
+                                                                class="material-icons md-edit"></i>Update</a>
+                                                    </div>
+                                                    <div class="dropdown">
+                                                        <a class="dropdown-item text-danger border rounded bg-success"
+                                                            href="/product/deleteproduct/<%= pd.id %>"><i
+                                                                class="material-icons md-delete_forever"></i>Delete</a>
+                                                    </div>
+                                                </td>
 
-
-            <!-- Form Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="row g-4">
+                                                <% }%>
+                                                    <% }else{ %>
+                                                        <td class="text-center align-middle" colspan="9">
+                                                            <p class="text-center text-danger">No Record Found</p>
+                                                        </td>
+                                                        <% } %>
+                                            </tr>
+                                </tbody>
+                            </table>
+                            <% if(currentPage> 0){ %>
+                                <a href="?pages=<%= currentPage - 1 %>&search=<%= searchValue %>"
+                                    class="btn btn-primary" style="padding: 10px 16px;">
+                                    Previous</a>
+                                <% } %>
+                                    <% if(currentPage> 0){ %>
+                                        <a href="?pages=<%= currentPage - 1 %>&search=<%= searchValue %>"
+                                            class="btn border" style="padding: 10px 16px;">
+                                            <%= currentPage %>
+                                        </a>
+                                        <% } %>
+                                            <a href="?pages=<%= currentPage %>&search=<%= searchValue %>"
+                                                class="btn btn-primary" style="padding: 10px 16px;">
+                                                <%= currentPage + 1 %>
+                                            </a>
+                                            <% if(totalDocument> currentPage + 1){ %>
+                                                <a href="?pages=<%= currentPage + 1 %>&search=<%= searchValue %>"
+                                                    class="btn border" style="padding: 10px 16px;">
+                                                    <%= currentPage + 2 %>
+                                                </a>
+                                                <% } %>
+                                                    <% if(totalDocument> currentPage + 1){ %>
+                                                        <a href="?pages=<%= currentPage + 1 %>&search=<%= searchValue %>"
+                                                            class="btn btn-primary" style="padding: 10px 16px;">Next</a>
+                                                        <% } %>
+                        </div>
+                    </div>
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-info rounded h-100 p-4">
                             <h6 class="mb-4">active view product </h6>
@@ -220,35 +354,46 @@
                                 <thead>
                                     <tr class="table-info">
                                         <th scope="col">#</th>
-                                        <th scope="col">Pro. name</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Sale price</th>
-                                        <th scope="col">Images</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">status</th>
-                                        <th scope="col" colspan="2">Action</th>
+                                        <th class="text-center">Image</th>
+                                        <th class="text-center">Product name</th>
+                                        <th class="text-center">Price</th>
+                                        <th class="text-center">color</th>
+                                        <th class="text-center">Size</th>
+                                        <th class="text-center">Subcategory</th>
+                                        <th class="text-center">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <%ProductData.map((item,i)=>{%>
-                                        <tr>
-                                            <td><%=i+1%></td>
-                                            <td><%=item.ProductName%></td>
-                                            <td><%=item.Price%></td>
-                                            <td><%=item.SellingPrice%></td>
-                                            <td><img src="<%=item.images%>" style="width: 50px;" alt=""></td>
-                                            <td><%=item.Description%></td>
-                                            <td>
-                                            <%if(item.status){%>
-                                                <a href="/product/productstatus/?id=<%=item.id%>&status=false"
-                                                    class="btn btn-success">Active</a>
-                                                <%}else{%>
-                                                    <a href="/product/productstatus/?id=<%=item.id%>&status=true"
-                                                        class="btn btn-danger">Deactive</a>
-                                                    <%}%>
-                                                </td>
-                                            <td><a href="/product/updateproductpage/?id=<%=item.id%>" class="btn btn-success">Update</a></td>
-                                            <td><a href="/product/deleteteproduct/?id=<%=item.id%>" class="btn btn-danger">Delete</td>
+                                    <% activeproduct.map((v,i)=>{%>
+                                        <tr class="table-success">
+                                            <td scope="col">
+                                                <%=i+1%>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <img src="<%= pd.product_image %>" class="img-sm img-thumbnail"
+                                                    alt="Product">
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <h6>
+                                                    <%= v.product_name %>
+                                                </h6>
+                                            </td>
+                                            <td class="text-center align-middle"><span>₹</span>
+                                                <%= pd.product_price %>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <%= pd.product_color %>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <%= pd.product_size %>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <%= pd.subcategoryId.subcategory_name %>
+                                            </td>
+                                            <td scope="col">
+                                                <%= v.status %>
+                                            </td>
+                                            
                                         </tr>
                                         <%})%>
                                 </tbody>
@@ -257,40 +402,52 @@
                     </div>
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-info rounded h-100 p-4">
-                            <h6 class="mb-4">deactive view extra category </h6>
+                            <h6 class="mb-4">deactive view product </h6>
                             <table border="1" class="table table-hover">
                                 <thead>
                                     <tr class="table-success">
                                         <th scope="col">#</th>
-                                        <th scope="col">Pro. name</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Sale price</th>
-                                        <th scope="col">Images</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">status</th>
-                                        <th scope="col" colspan="2">Action</th>
+                                        <th class="text-center">Image</th>
+                                        <th class="text-center">Product name</th>
+                                        <th class="text-center">Price</th>
+                                        <th class="text-center">color</th>
+                                        <th class="text-center">Size</th>
+                                        <th class="text-center">Subcategory</th>
+                                        <th class="text-center">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% deactiveProductData.map((item,i)=>{%>
-                                        <tr>
-                                            <td><%=i+1%></td>
-                                            <td><%=item.ProductName%></td>
-                                            <td><%=item.Price%></td>
-                                            <td><%=item.SellingPrice%></td>
-                                            <td><img src="<%=item.images%>" style="width: 50px;" alt=""></td>
-                                            <td><%=item.Description%></td>
-                                            <td>
-                                            <%if(item.status){%>
-                                                <a href="/product/productstatus/?id=<%=item.id%>&status=false"
-                                                    class="btn btn-success">Active</a>
-                                                <%}else{%>
-                                                    <a href="/product/productstatus/?id=<%=item.id%>&status=true"
-                                                        class="btn btn-danger">Deactive</a>
-                                                    <%}%>
-                                                </td>
-                                            <td><a href="/product/updateproductpage/?id=<%=item.id%>" class="btn btn-success">Update</a></td>
-                                            <td><a href="/product/deleteteproduct/?id=<%=item.id%>" class="btn btn-danger">Delete</td>
+                                    <% detiveproduct.map((v,i)=>{%>
+                                        <tr class="table-success">
+                                            <td scope="col">
+                                                <%=i+1%>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <img src="<%= pd.product_image %>" class="img-sm img-thumbnail"
+                                                    alt="Product">
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <h6>
+                                                    <%= v.product_name %>
+                                                </h6>
+                                            </td>
+                                            <td class="text-center align-middle"><span>₹</span>
+                                                <%= pd.product_price %>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <%= pd.product_color %>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <%= pd.product_size %>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <%= pd.subcategoryId.subcategory_name %>
+                                            </td>
+                                            <td scope="col">
+                                                <%= v.status %>
+                                                    
+                                            </td>
+                                            
                                         </tr>
                                         <%})%>
                                 </tbody>
@@ -299,32 +456,31 @@
                     </div>
                 </div>
             </div>
-            <!-- Form End -->
-
-            <div class="container-fluid pt-4 px-4">
-                <div class="bg-secondary rounded-top p-4">
-                    <div class="row">
-                        <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">Your Site Name</a>, All Right Reserved.
-                        </div>
-                        <div class="col-12 col-sm-6 text-center text-sm-end">
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                            Designed By <a href="https://htmlcodex.com">HTML Codex</a>
-                            <br>Distributed By: <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-                        </div>
-                    </div>
+    </section>
+    <div class="container-fluid pt-4 px-4">
+        <div class="bg-secondary rounded-top p-4">
+            <div class="row">
+                <div class="col-12 col-sm-6 text-center text-sm-start">
+                    &copy; <a href="#">Your Site Name</a>, All Right Reserved.
+                </div>
+                <div class="col-12 col-sm-6 text-center text-sm-end">
+                    <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                    Designed By <a href="https://htmlcodex.com">HTML Codex</a>
+                    <br>Distributed By: <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
                 </div>
             </div>
         </div>
-        <!-- Content End -->
-
-
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
-
-
-
+    </div>
+    <!-- Content End -->
+    
+    
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+    
+    
+    
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -335,9 +491,11 @@
     <script src="../lib/tempusdominus/js/moment.min.js"></script>
     <script src="../lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
+    
     <!-- Template Javascript -->
     <script src="../js/main.js"></script>
-</body>
+    </body>
+    
+    </html>
 
-</html>
+   

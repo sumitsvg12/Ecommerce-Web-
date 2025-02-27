@@ -28,6 +28,7 @@ passport.use("user",new localstrategy({
     usernameField: "email"
 }, async function (email, password, done) {
     let admitdata = await Userauth.findOne({ email: email });
+    console.log(admitdata);
     if (admitdata) {
         if (admitdata.password == password) {
             return done(null, admitdata);

@@ -36,6 +36,70 @@
 
 <!-- Template Javascript -->
 <script src="../js/main.js"></script>
+<script>
+
+
+    function getsubcatData() {
+            var catId = document.getElementById("catId").value;
+            $.ajax({
+                url: " /category/getsubcategory",
+                method: "POST",
+                data: {
+                    "categoryId": catId
+                },
+                success: function (res) {
+                    $("#subcatId").html(res)
+                }
+            })
+        }
+              function getextracatData() {
+            var catId = document.getElementById("catId").value;
+            var subcatId = document.getElementById("subcatId").value
+            $.ajax({
+                url: "/brand/getextracategoryData",
+                method: "POST",
+                data: {
+                    "categoryId": catId,
+                    "subcategoryId": subcatId
+                },
+                success: function (res) {
+                    $("#extracatId").html(res)
+                }
+            })
+        }
+        function getbrandData() {
+            var extraId = document.getElementById("extracatId").value;
+            $.ajax({
+                url: "/type/getextbrandData",
+                method: "POST",
+                data: {
+                    extraid: extraId
+                },
+                success: function (res) {
+                    $("#brandId").html(res)
+                }
+            })
+        }
+        function getBrandTypeData() {
+            let catId = document.getElementById("catId").value;
+            let subcatId = document.getElementById("subcatId").value;
+            let extracatId = document.getElementById("extracatId").value;
+            
+            $.ajax({
+                url: "/product/getBrandType",
+                method: "POST",
+                data: {
+                    categoryId: catId,
+                    subcategoryId: subcatId,
+                    extracategoryId: extracatId,
+                },
+                success: (res) => {
+                    $("#BrandType").html(res);
+                }
+            })
+        }
+    
+        </script>
 </body>
 
 </html>

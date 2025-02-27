@@ -11,13 +11,17 @@ module.exports.add_product = async (req, res) => {
   let extracatData = await extracategory.find({});
   let brandData = await brand.find({});
   let typeData = await type.find({});
-  return res.render("Admin_pages/Add_product", {
+
+  if (req.isAuthenticated()) {
+    res.locals.user = req.user
+  return res.render("product/Addproduct", {
     catData: catData,
     subcatData: subcatData,
     extracatData: extracatData,
     brandData: brandData,
     typeData: typeData,
   });
+}
 };
 
 module.exports.insert_product = async (req, res) => {
@@ -39,9 +43,6 @@ module.exports.insert_product = async (req, res) => {
     }
     req.body.product_image = singleimag;
     req.body.product_multiple_image = multiimage;
-    req.body.isActive = true;
-    req.body.created_date = new Date().toLocaleString();
-    req.body.updated_date = new Date().toLocaleString();
     let productData = await product.create(req.body);
     if (productData) {
       console.log("Product Added Successfully");
@@ -93,13 +94,20 @@ module.exports.view_product = async (req, res) => {
         ],
       })
       .countDocuments();
+      let activeproduct= await product.find({ status: "true" })
+        let detiveproduct = await product.find({ status: "false" })
     // console.log(productData);
-    return res.render("Admin_pages/View_product", {
+    if (req.isAuthenticated()) {
+      res.locals.user = req.user
+    return res.render("product/Viewproduct", {
       productData: productData,
       searchValue: search,
       totalDocument: Math.ceil(totalproductData / perPage),
       currentPage: parseInt(page),
+      activeproduct,
+      detiveproduct
     });
+  }
   } catch (error) {
     console.log(error);
     return res.redirect("back");
@@ -110,7 +118,7 @@ module.exports.isActive = async (req, res) => {
   try {
     if (req.params.id) {
       let active = await product.findByIdAndUpdate(req.params.id, {
-        isActive: false,
+        status: false,
       });
       if (active) {
         console.log("Product Deactived Successfully");
@@ -133,7 +141,7 @@ module.exports.deActive = async (req, res) => {
   try {
     if (req.params.id) {
       let active = await product.findByIdAndUpdate(req.params.id, {
-        isActive: true,
+        status: true,
       });
       if (active) {
         console.log("Product actived Successfully");
@@ -204,7 +212,9 @@ module.exports.updateproduct = async (req, res) => {
         "brandId",
         "typeId",
       ]);
-    return res.render("Admin_pages/Update_product", {
+      if (req.isAuthenticated()) {
+        res.locals.user = req.user
+    return res.render("product/Update_product", {
       categoryData: categoryData,
       subcategoryData: subcategoryData,
       extracategoryData: extracategoryData,
@@ -212,6 +222,7 @@ module.exports.updateproduct = async (req, res) => {
       productData: productData,
       typeData: typeData,
     });
+  }
   } catch (err) {
     console.log(err);
     return res.redirect("back");
@@ -220,7 +231,7 @@ module.exports.updateproduct = async (req, res) => {
 
 module.exports.editproduct = async (req, res) => {
   try {
-    let oldproduct = await product.findById(req.body.EditId);
+    let oldproduct = await product.findById(req.params.id);
     if (req.file) {
       if (oldproduct.product_image) {
         let fullpath = path.join(__dirname, "..", oldproduct.product_image);
@@ -233,7 +244,7 @@ module.exports.editproduct = async (req, res) => {
       req.body.product_image = oldproduct.product_image;
     }
     await product.findByIdAndUpdate(req.body.EditId, req.body);
-    return res.redirect("/admin/type/view_product");
+    return res.redirect("back");
   } catch (err) {
     console.log(err);
     return res.redirect("back");
@@ -252,10 +263,21 @@ module.exports.getBrandType = async (req, res) => {
       categoryId: req.body.categoryId,
       subcategoryId: req.body.subcategoryId,
       extracategoryId: req.body.extracategoryId,
+      brandId:req.body.brandId,
     });
+    let typebrand=[];
+  typeData.map((v,i)=>{
+    console.log(v.brandId)
+    typebrand=v.brandId;
+  })
+  let brandtype=await type.find({typebrand:req.body.brandId})
+  console.log(brandtype)
     return res.render("Admin_pages/ajaxBrandType", {
       brandData: brandData,
       typeData: typeData,
+     typebrand,
+     brandtype
+
     });
   } catch (err) {
     console.log(err);
