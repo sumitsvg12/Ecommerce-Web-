@@ -22,6 +22,7 @@ const cookieParser= require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
 const localstrategy=require('./config/passport-local-strategy');
+const GoogleStrategy = require("./config/google_oauth");
 const  flash = require('connect-flash');
 const flashmessage=require("./config/flashmessage");
 

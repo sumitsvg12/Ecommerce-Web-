@@ -13,7 +13,9 @@
     "nodemailer": "^6.10.0",
     "otp-timer": "^1.1.5",
     "passport": "^0.7.0",
-    "passport-local": "^1.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "stripe": "^17.7.0"
   },
   "name": "ecommerce-project",
   "version": "1.0.0",
