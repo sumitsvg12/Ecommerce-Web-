@@ -6,6 +6,7 @@ const type = require("../models/type");
 const product = require("../models/product");
 
 module.exports.add_product = async (req, res) => {
+  console.log("is add data");
   let catData = await category.find({});
   let subcatData = await subcategory.find({});
   let extracatData = await extracategory.find({});
