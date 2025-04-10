@@ -30,7 +30,7 @@ app.set("view engine","ejs");
 app.set("views",path.join((__dirname,"views")));
 
 app.use(cookieParser());
-app.use("./src/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.static(path.join(__dirname,"assets")));
 
 app.use(express.static(path.join(__dirname,"assets/ecommerce")));

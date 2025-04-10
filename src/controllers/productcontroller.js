@@ -15,7 +15,7 @@ module.exports.add_product = async (req, res) => {
 
   if (req.isAuthenticated()) {
     res.locals.user = req.user
-  return res.render("product/Addproduct", {
+  return res.render("Product/Addproduct", {
     catData: catData,
     subcatData: subcatData,
     extracatData: extracatData,
