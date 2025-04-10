@@ -1,2 +1,4 @@
+.env
+config/google_oauth.js
+
 node_modules/
-config/google_oauth

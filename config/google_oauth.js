@@ -8,8 +8,8 @@ passport.use(
   new GoogleStrategy(
     {
       clientID:
-        "your_google_client_id",
-      clientSecret: "your_google_client_secret",
+        "process.env.GOOGLE_CLIENT_ID",
+      clientSecret: "process.env.GOOGLE_CLIENT_SECRET",
       callbackURL: "https://e-commerce-i4o1.onrender.com/google/callback",
     },
     async function (accessToken, refreshToken, profile, cb) {
