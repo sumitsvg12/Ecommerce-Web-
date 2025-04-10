@@ -56,7 +56,7 @@ app.use(passport.session());
 app.use(flash());
 app.use(flashmessage.setflash);
 
-app.use("/",require("./src/routes/ecomercepanelroutes"));
+app.use("/",require("./src/routes/ecommerceser"));
 
 app.listen(port,(err)=>{
     if(err){
