@@ -24,7 +24,7 @@ const passport = require('passport');
 const localstrategy=require('./src/config/passport-local-strategy');
 const GoogleStrategy = require("./src/config/google_oauth");
 const  flash = require('connect-flash');
-const flashmessage=require("./config/flashmessage");
+const flashmessage=require("./src/config/flashmessage");
 
 app.set("view engine","ejs");
 app.set("views",path.join((__dirname,"views")));
