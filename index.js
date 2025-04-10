@@ -21,8 +21,8 @@ const cookieParser= require('cookie-parser');
 
 const session = require('express-session');
 const passport = require('passport');
-const localstrategy=require('./config/passport-local-strategy');
-const GoogleStrategy = require("./config/google_oauth");
+const localstrategy=require('./src/config/passport-local-strategy');
+const GoogleStrategy = require("./src/config/google_oauth");
 const  flash = require('connect-flash');
 const flashmessage=require("./config/flashmessage");
 
@@ -56,7 +56,7 @@ app.use(passport.session());
 app.use(flash());
 app.use(flashmessage.setflash);
 
-app.use("/",require("./routes/ecommerceser"));
+app.use("/",require("./src/routes/ecomercepanelroutes"));
 
 app.listen(port,(err)=>{
     if(err){
